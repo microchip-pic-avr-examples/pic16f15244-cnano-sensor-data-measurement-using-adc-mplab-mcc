@@ -4,7 +4,7 @@
 
 # Sensor Data Measurement using PIC16F15244 Microcontroller
 
-This example demonstrates use of Analog-to-Digital (ADC), Timer peripherals in real time applications. In this demo, use of ADC peripheral to perform  sensor data measurement is demonstrated.
+This example demonstrates sensor data measurement(i.e. acquiring and processing sensor raw data using built in ADC and timer peripherals of the PIC microcontroller.
 
 ## Introduction
 
@@ -57,11 +57,11 @@ Microchip’s free IDE, compiler and graphical code generators are used througho
 
 * MPLAB® X IDE [v6.00.0 or newer](https://www.microchip.com/mplab/mplab-x-ide)
 * XC8 Compiler [v2.36.0 or newer](https://www.microchip.com/mplab/compilers)
-* MPLAB Code Configurator (MCC) [v5.0.3](https://www.microchip.com/mplab/mplab-code-configurator)
+* MPLAB Code Configurator (MCC) [v5.1.1](https://www.microchip.com/mplab/mplab-code-configurator)
 * TMR2 MCC Melody driver 4.0.10
 * UART MCC Melody driver 1.6.0
 * PWM MCC Melody driver 4.2.3
-* Microchip PIC16F1xxxx Series Device Support [1.9.163 or newer](https://packs.download.microchip.com/)
+* Microchip PIC16F1xxxx Series Device Support [1.13.178 or newer](https://packs.download.microchip.com/)
 
 ***Note: For running the demo, the installed tool versions should be the same or later. This example is not tested with the previous versions.***
 
