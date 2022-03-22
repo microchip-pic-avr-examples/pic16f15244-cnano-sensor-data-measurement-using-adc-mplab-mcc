@@ -3,8 +3,8 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>pic16f15244-adc-sensor-data-measurement</name>
-            <creation-uuid>d78288d3-fd82-4ee8-95c3-a650e2972abf</creation-uuid>
+            <name>pic16f15244-cnano-sensor-data-measurement-using-adc-mplab-mcc</name>
+            <creation-uuid>415f0357-fb9d-4b01-a7f9-54129e4f0947</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
             <cpp-extensions/>

@@ -40,22 +40,22 @@
 int main(void)
 {
     SYSTEM_Initialize();
-
+    
     // If using interrupts in PIC18 High/Low Priority Mode you need to enable the Global High and Low Interrupts 
     // If using interrupts in PIC Mid-Range Compatibility Mode you need to enable the Global and Peripheral Interrupts 
     // Use the following macros to: 
 
     // Enable the Global Interrupts 
-    INTERRUPT_GlobalInterruptEnable(); 
-
+    INTERRUPT_GlobalInterruptEnable();
+    
     // Disable the Global Interrupts 
     //INTERRUPT_GlobalInterruptDisable(); 
-
-    // Enable the Peripheral Interrupts 
+    
+    // Enable the Peripheral Interrupts
     INTERRUPT_PeripheralInterruptEnable(); 
 
     // Disable the Peripheral Interrupts 
-    //INTERRUPT_PeripheralInterruptDisable(); 
+    //INTERRUPT_PeripheralInterruptDisable();
 
     Timer2_OverflowCallbackRegister(TMR2_UserInterruptHandler);
     
@@ -63,7 +63,7 @@ int main(void)
     printf("\n\t Device is entering Sleep Mode");
     printf("\n\t Press switch to start analog sensor measurement and alcohol detection");
     __delay_ms(SETTLING_TIME);
-
+    
     Init_TMR2_for_Debouncing();
     SLEEP();
     

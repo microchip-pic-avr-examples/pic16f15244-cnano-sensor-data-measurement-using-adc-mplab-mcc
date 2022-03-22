@@ -63,7 +63,7 @@ void PIN_MANAGER_Initialize(void)
     */
     WPUA = 0x0;
     WPUB = 0x0;
-    WPUC = 0x0;
+    WPUC = 0x4;
   
 
     /**
@@ -93,11 +93,11 @@ void PIN_MANAGER_Initialize(void)
     /**
     PPS registers
     */
-    RX1PPS = 0x11; //RC1->EUSART1:RX1;
     ADACTPPS = 0x5; //RA5->ADC:ADACT;
     T2INPPS = 0x12; //RC2->TMR2:T2IN;
-    RC0PPS = 0x05;  //RC0->EUSART1:TX1;
+    RX1PPS = 0x11; //RC1->EUSART1:RX1;
     RA2PPS = 0x03;  //RA2->PWM3:PWM3OUT;
+    RC0PPS = 0x05;  //RC0->EUSART1:TX1;
 
    /**
     IOCx registers 
