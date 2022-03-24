@@ -72,6 +72,55 @@ Microchip’s free IDE, compiler and graphical code generators are used througho
 * [Alcohol Click](https://www.mikroe.com/alcohol-click)
 * [Buzz 2 Click](https://www.mikroe.com/buzz-2-click)
 
+## Hardware Setup
+
+The following figure consists of Alcohol Click, Buzz 2 Click, Curiosity Nano Adapter Board and PIC16F15244 Curiosity Nano Evaluation kit. The figure shows the detailed information about the hardware setup. The alcohol click and buzz 2 click are interfaced with PIC16F15244 MCU using curiosity nano adapter slot 1 and 2 respectively.
+
+<p align="center">
+  <img width=600 height=auto src="images/setup.png">
+  <br>Figure 4: Hardware Setup <br>
+</p>
+
+MQ-3 sensor and the click board with pot for adjustable resistance is visible from the below image.
+
+<p align="center">
+  <img width=600 height=auto src="images/mq_sensor.png">
+  <br>Figure 5: MQ-3 Sensor & Click Board <br>
+</p>
+
+## Operation
+
+* Make the hardware connections as shown in the Hardware Setup. Power up the Curiosity Nano board using micro-USB cable.
+* Download the firmware available from the github page link.
+* Build the project using latest version of tools as mentioned in the Software Tools section and load the generated hexadecimal file in to the PIC16F15244 MCU.
+* After running the program, initially the Data Visualizer will display the project name as shown in figure below.
+
+<p align="center">
+  <img width=600 height=auto src="images/default_window.png">
+  <br>Figure 6: Default Display Screen <br>
+</p>
+
+* To wake up the device and perform the alcohol detection test, press the on-board switch. As soon as you press the on-board switch the terminal window pops up with the next commands as shown in the below figure
+
+<p align="center">
+  <img width=600 height=auto src="images/switch_press.png">
+  <br>Figure 7: Post switch press Display Screen <br>
+</p>
+
+* Dip the cotton ball/cotton bud in the liquid containing alcohol and hold it in front of the sensor for 5 seconds
+* After 5 seconds, the result of the alcohol test will be displayed on the terminal window as shown in below figure. The buzzer starts ringing if the alcohol presence is detected.
+
+<p align="center">
+  <img width=600 height=auto src="images/output_window.png">
+  <br>Figure 8: Result Screen <br>
+</p>
+
+* The device goes into sleep mode after the alcohol detection test is performed. For repeating the alcohol detection test press the  on board switch.
+
+## Conclusion
+
+The usage of ADC peripheral along with the sleep mode feature is showcased using analog data measurement for alcohol sensor.
+
 ## Appendix
 
 MCC – MPLAB® Code Configurator is a graphical programming environment that generates seamless, easy to understand C code to give a head start to the project, saving the designer’s time to initialize and configure all the modules, and to go through the datasheets. Using an instructive interface, it enables and configures all peripherals and functions specific to the application requirements.
@@ -95,7 +144,7 @@ The following figure shows the system configuration setting in MCC tool.
 
 <p align="center">
   <img width=600 height=auto src="images/clock_config.png">
-  <br>Figure 4: System Clock Configuration <br>
+  <br>Figure 9: System Clock Configuration <br>
 </p>
 
 ## Timer 2 Configuration
@@ -111,7 +160,7 @@ Part 1: The timer is configured for PWM setup, which will dynamically switch to 
 
 <p align="center">
   <img width=600 height=auto src="images/timer_config.png">
-  <br>Figure 5: Timer2 Configuration - PWM Setup <br>
+  <br>Figure 10: Timer2 Configuration - PWM Setup <br>
 </p>
 
 Part 2: Generate one more project with Timer in HLT mode for debouncing with following configuration.
@@ -126,7 +175,7 @@ Part 2: Generate one more project with Timer in HLT mode for debouncing with fol
 
 <p align="center">
   <img width=600 height=auto src="images/timer_config_1.png">
-  <br>Figure 6: Timer2 Configuration - HLT Mode Setup <br>
+  <br>Figure 11: Timer2 Configuration - HLT Mode Setup <br>
 </p>
 
 ## EUSART Configuration
@@ -140,7 +189,7 @@ EUSART is used for displaying the alcohol detection test results and debugging p
 
 <p align="center">
   <img width=600 height=auto src="images/eusart_config.png">
-  <br>Figure 7: EUSART Configuration <br>
+  <br>Figure 12: EUSART Configuration <br>
 </p>
 
 ## PWM Configuration
@@ -151,7 +200,7 @@ EUSART is used for displaying the alcohol detection test results and debugging p
 
 <p align="center">
   <img width=600 height=auto src="images/pwm_config.png">
-  <br>Figure 8: PWM Configuration <br>
+  <br>Figure 13: PWM Configuration <br>
 </p>
 
 ## ADC Configuration
@@ -163,66 +212,16 @@ EUSART is used for displaying the alcohol detection test results and debugging p
 
 <p align="center">
   <img width=600 height=auto src="images/adc_config.png">
-  <br>Figure 9: ADC Configuration <br>
+  <br>Figure 14: ADC Configuration <br>
 </p>
 
 ## Pin Mapping
 
 <p align="center">
   <img width=600 height=auto src="images/pin_config.png">
-  <br>Figure 10: Pin Configuration <br>
+  <br>Figure 15: Pin Configuration <br>
 </p>
 
 * The pin mapping highlights the timer 2 and switch with the same pin mapped, as HLT mode is used.
 * The ADC channel selection is highlighted as it takes input from RA5 pin (CHS value : 000101).
 * PWM provides output to the buzzer, which uses Timer 2.
-
-## Hardware Setup
-
-The following figure consists of Alcohol Click, Buzz 2 Click, Curiosity Nano Adapter Board and PIC16F15244 Curiosity Nano Evaluation kit. The figure shows the detailed information about the hardware setup. The alcohol click and buzz 2 click are interfaced with PIC16F15244 MCU using curiosity nano adapter slot 1 and 2 respectively.
-
-<p align="center">
-  <img width=600 height=auto src="images/setup.png">
-  <br>Figure 11: Hardware Setup <br>
-</p>
-
-MQ-3 sensor and the click board with pot for adjustable resistance is visible from the below image.
-
-<p align="center">
-  <img width=600 height=auto src="images/mq_sensor.png">
-  <br>Figure 12: MQ-3 Sensor & Click Board <br>
-</p>
-
-## Operation
-
-* Make the hardware connections as shown in the Hardware Setup. Power up the Curiosity Nano board using micro-USB cable.
-* Download the firmware available from the github page link.
-* Build the project using latest version of tools as mentioned in the Software Tools section and load the generated hexadecimal file in to the PIC16F15244 MCU.
-* After running the program, initially the Data Visualizer will display the project name as shown in figure below.
-
-<p align="center">
-  <img width=600 height=auto src="images/default_window.png">
-  <br>Figure 13: Default Display Screen <br>
-</p>
-
-* To wake up the device and perform the alcohol detection test, press the on-board switch. As soon as you press the on-board switch the terminal window pops up with the next commands as shown in the below figure
-
-<p align="center">
-  <img width=600 height=auto src="images/switch_press.png">
-  <br>Figure 14: Post switch press Display Screen <br>
-</p>
-
-* Dip the cotton ball/cotton bud in the liquid containing alcohol and hold it in front of the sensor for 5 seconds
-* After 5 seconds, the result of the alcohol test will be displayed on the terminal window as shown in below figure. The buzzer starts ringing if the alcohol presence is detected.
-
-<p align="center">
-  <img width=600 height=auto src="images/output_window.png">
-  <br>Figure 15: Result Screen <br>
-</p>
-
-* The device goes into sleep mode after the alcohol detection test is performed. For repeating the alcohol detection test press the  on board switch.
-
-## Conclusion
-
-The usage of ADC peripheral along with the sleep mode feature is showcased using analog data measurement for alcohol sensor.
-
