@@ -8,7 +8,7 @@ This example demonstrates sensor data measurement(i.e. acquiring and processing 
 
 ## Introduction
 
-The PIC16F15244 family of microcontrollers are equipped with Analog-to-Digital (ADC) with 10-bit resolution and option to provide up to 28 external and 2 internal channels, 8-bit Timer with Hardware Limit Timer and 2 Capture/Compare/PWM (CCP) modules with 10-bit resolution Pulse Width Modulation (PWM) mode and Enhanced Universal Synchronous Asynchronous Receiver Transmitter(EUSART). This example describes the implementation of sensor (alcohol sensor) data measurement using ADC peripheral of PIC16F15244 MCU. EUSART peripheral is used to display the test results on the terminal window. On performing the sensor data measurement(alcohol detection), the result is compared with the threshold values. PWM is used to enable the buzzer along with the result on terminal window if presence of alcohol is detected.
+The PIC16F152xx family of microcontrollers are equipped with Analog-to-Digital (ADC) with 10-bit resolution and option to provide up to 28 external and 2 internal channels, 8-bit Timer with Hardware Limit Timer and 2 Capture/Compare/PWM (CCP) modules with 10-bit resolution Pulse Width Modulation (PWM) mode and Enhanced Universal Synchronous Asynchronous Receiver Transmitter(EUSART). This example describes the implementation of sensor (alcohol sensor) data measurement using ADC peripheral of PIC16F15244 MCU. EUSART peripheral is used to display the test results on the terminal window. On performing the sensor data measurement(alcohol detection), the result is compared with the threshold values. PWM is used to enable the buzzer along with the result on terminal window if presence of alcohol is detected.
 
 ## Related Links
 
