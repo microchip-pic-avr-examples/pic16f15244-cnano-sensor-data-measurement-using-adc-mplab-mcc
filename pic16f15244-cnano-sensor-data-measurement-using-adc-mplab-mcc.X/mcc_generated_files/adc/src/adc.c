@@ -1,26 +1,17 @@
 /**
-  ADC Generated Driver File
-
-  @Company
-    Microchip Technology Inc.
-
-  @File Name
-    adc.c
-
-  @Summary
-    This is the generated driver implementation file for the ADC driver.
-
-  @Description
-    This source file provides APIs for driver for ADC.
-    Generation Information :
-        Driver Version    :  2.01
-    The generated drivers are tested against the following:
-        Compiler          :  XC8 v2.31
-        MPLAB             :  MPLABX v5.45
+ * ADC Generated Driver File
+ * 
+ * @file adc.c
+ * 
+ * @ingroup  adc
+ * 
+ * @brief This file contains the API implementations for the ADC module.
+ *
+ * @version ADC Driver Version 2.1.3
 */
 
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2023] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -61,72 +52,69 @@
 
 void ADC_Initialize(void)
 {
-    // ADPREF VDD; ADCS FOSC/4; ADFM right; 
+    //ADPREF VDD; ADCS FOSC/4; ADFM right; 
     ADCON1 = 0xC0;
 
-    // ADRESL 0x0; 
+    //ADRESL 0x0; 
     ADRESL = 0x0;
 
-    // ADRESH 0x0; 
+    //ADRESH 0x0; 
     ADRESH = 0x0;
 
-    // ADACT disabled; 
-    ADACT = 0x0;
+    //ADACT ADACTPPS; 
+    ADACT = 0x1;
 
-    // ADON enabled; GO_nDONE stop; CHS ANA0; 
-    ADCON0 = 0x1;
+    //ADON enabled; GO_nDONE stop; CHS ANA5; 
+    ADCON0 = 0x15;
 
-    // Clear the ADC interrupt flag
+    //Clear the ADC interrupt flag
     PIR1bits.ADIF = 0;
-    
 }
 
 void ADC_SelectChannel(adc_channel_t channel)
 {
-    // select the A/D channel
+    //Selects the A/D channel
     ADCON0bits.CHS = channel;    
-    // Turn on the ADC module
-    ADON = 1;  
 }
 
 void ADC_StartConversion(void)
 {
-    // Start the conversion
-    GO_nDONE = 1;
+    //Starts the conversion
+    ADCON0bits.GO_nDONE = 1;
 }
 
 bool ADC_IsConversionDone(void)
 {
-    // Start the conversion
-   return ((bool)(!GO_nDONE));
+    //Returns the conversion status
+    return ((bool)(!ADCON0bits.GO_nDONE));
 }
 
 adc_result_t ADC_GetConversionResult(void)
 {
-    // Conversion finished, return the result
+    //Conversion finished, returns the result
     return ((adc_result_t)((ADRESH << 8) + ADRESL));
 }
 
 adc_result_t ADC_GetConversion(adc_channel_t channel)
 {
-    // select the A/D channel
+    //Selects the A/D channel
     ADCON0bits.CHS = channel;
     
-    // Turn on the ADC module
-    ADON = 1;
+    //Turns on the ADC module
+    ADCON0bits.ADON = 1;
 
-    // Acquisition time delay
+    //Acquisition time delay
     __delay_us(ACQ_US_DELAY);
 
-    // Start the conversion
-    GO_nDONE = 1;
+    //Starts the conversion
+    ADCON0bits.GO_nDONE = 1;
 
-    // Wait for the conversion to finish
-    while (GO_nDONE)
+    //Waits for the conversion to finish
+    while (ADCON0bits.GO_nDONE)
     {
     }
 
-    // Conversion finished, return the result
+    //Conversion finished, returns the result
     return ((adc_result_t)((ADRESH << 8) + ADRESL));
 }
 

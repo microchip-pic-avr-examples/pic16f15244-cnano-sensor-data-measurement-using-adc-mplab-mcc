@@ -5,13 +5,13 @@
  * 
  * @ingroup  tmr2
  * 
- * @brief This is the generated driver implementation file for the TMR2 module.
+ * @brief API implementations for the TMR2 module.
  *
- * @version TMR2 Driver Version 3.0.1
+ * @version TMR2 Driver Version 3.0.2
  */
 
 /*
-© [2022] Microchip Technology Inc. and its subsidiaries.
+© [2023] Microchip Technology Inc. and its subsidiaries.
 
     Subject to your compliance with these terms, you may use Microchip 
     software and any derivatives exclusively with Microchip products. 
@@ -38,7 +38,7 @@
 #include <xc.h>
 #include "../tmr2.h"
 
-const struct TMR_INTERFACE Timer2 = {
+const struct TMR_INTERFACE timer2 = {
     .Initialize = Timer2_Initialize,
     .Start = Timer2_Start,
     .Stop = Timer2_Stop,
@@ -57,14 +57,14 @@ static void Timer2_DefaultOverflowCallback(void);
 void Timer2_Initialize(void){
 
     // Set TMR2 to the options selected in the User Interface
-    // TCS FOSC/4; 
-    T2CLKCON = 0x1;
-    // TMODE Software control; TCKSYNC Not Synchronized; TCKPOL Rising Edge; TPSYNC Not Synchronized; 
-    T2HLT = 0x0;
+    // TCS LFINTOSC; 
+    T2CLKCON = 0x4;
+    // TMODE Starts on rising edge on TMR2_ers; TCKSYNC Not Synchronized; TCKPOL Rising Edge; TPSYNC Not Synchronized; 
+    T2HLT = 0x11;
     // TRSEL T2INPPS pin; 
     T2RST = 0x0;
-    // PR 255; 
-    T2PR = 0xFF;
+    // PR 12; 
+    T2PR = 0xC;
     // TMR 0x0; 
     T2TMR = 0x0;
 

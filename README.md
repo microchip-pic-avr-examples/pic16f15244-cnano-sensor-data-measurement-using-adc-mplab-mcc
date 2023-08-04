@@ -55,13 +55,14 @@ The buzzer is used as an indicator for alcohol detection. PWM is required to tur
 
 Microchip’s free IDE, compiler and graphical code generators are used throughout the application firmware development. Following are the tools used for this demo application:
 
-* MPLAB® X IDE [v6.00.0 or newer](https://www.microchip.com/mplab/mplab-x-ide)
-* XC8 Compiler [v2.36.0 or newer](https://www.microchip.com/mplab/compilers)
-* MPLAB Code Configurator (MCC) [v5.1.1](https://www.microchip.com/mplab/mplab-code-configurator)
-* TMR2 MCC Melody driver 4.0.10
-* UART MCC Melody driver 1.6.0
-* PWM MCC Melody driver 4.2.3
-* Microchip PIC16F1xxxx Series Device Support [1.13.178 or newer](https://packs.download.microchip.com/)
+* MPLAB® X IDE [v6.10.0 or newer](https://www.microchip.com/mplab/mplab-x-ide)
+* XC8 Compiler [v2.41.0 or newer](https://www.microchip.com/mplab/compilers)
+* MPLAB Code Configurator (MCC) [v5.3.7](https://www.microchip.com/mplab/mplab-code-configurator)
+* TMR2 MCC Melody Driver 4.0.16
+* EUSART MCC Melody Driver 7.1.4
+* PWM MCC Melody Driver 4.2.10
+* ADC MCC Melody Driver 3.0.10
+* Microchip PIC16F1xxxx Series Device Support [1.18.352 or newer](https://packs.download.microchip.com/)
 
 ***Note: For running the demo, the installed tool versions should be the same or later. This example is not tested with the previous versions.***
 
