@@ -62,7 +62,7 @@ Microchip’s free IDE, compiler and graphical code generators are used througho
 * EUSART MCC Melody Driver 7.1.4
 * PWM MCC Melody Driver 4.2.10
 * ADC MCC Melody Driver 3.0.10
-* Microchip PIC16F1xxxx Series Device Support [1.18.352 or newer](https://packs.download.microchip.com/)
+* Microchip PIC16F1xxxx Series Device Support [1.19.363 or newer](https://packs.download.microchip.com/)
 
 ***Note: For running the demo, the installed tool versions should be the same or later. This example is not tested with the previous versions.***
 
