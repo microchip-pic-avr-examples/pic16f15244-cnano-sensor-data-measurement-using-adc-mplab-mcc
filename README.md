@@ -2,227 +2,180 @@
 
 [![MCHP](images/microchip.png)](https://www.microchip.com)
 
-# Sensor Data Measurement Using PIC16F15244 Microcontroller
+# Interfacing the RTCC Module to the PIC16F15276 Microcontroller
 
-This example demonstrates sensor data measurement i. e. acquiring and processing the sensor raw data using the built in Analog-to-Digital Converter (ADC) and timer peripherals of the PIC® microcontroller.
+This code example demonstrates the usage of PIC16F15276 microcontroller together with MCP79410 Real-Time Clock/Calendar (RTCC) module for alarm feature implementation in the embedded applications, where the PIC16F15276 microcontroller communicates with MCP79410 module through serial communication interface like I2C.
 
 ## Introduction
 
-The PIC16F152xx family of microcontrollers are equipped with ADCs with 10-bit resolution and option to provide up to 28 external and two internal channels, an 8-bit timer with hardware limit timer and two Capture/Compare/PWM (CCP) modules with 10-bit resolution Pulse Width Modulation (PWM) mode and Enhanced Universal Synchronous Asynchronous Receiver Transmitter (EUSART). This example describes the implementation of an alcohol sensor data measurement using the ADC peripheral of PIC16F15244 MCU. The EUSART peripheral is used to display the test results on the terminal window. On performing the sensor data measurement, the alcohol detection, the result is compared with the threshold values. PWM is used to enable the buzzer along with the result on the terminal window, if the presence of alcohol is detected.
+The PIC16F152xx family of microcontrollers are available in the general purpose device packages for various embedded applications. The PIC16F15276 simplified feature set includes: Peripheral Pin Select (PPS), digital communication peripherals, timers, Enhanced Universal Synchronous Asynchronous Receiver Transmitter (EUSART). In real time applications, EUSART can be configured as a full-duplex asynchronous system or half-duplex synchronous system. Full-Duplex mode is useful for communications with peripheral systems, such as CRT terminals and personal computers. Half-Duplex Synchronous mode is intended for communications with peripheral devices, such as Analog-to-Digital (A/D) or Digital-to-Analog (D/A) integrated circuits, serial EEPROMs or other microcontrollers. Several embedded applications use I/O expander to add the additional I/O pins required for the main microcontroller while interfacing standalone IC modules, display modules, for various features implementation. The Master Synchronous Serial Port (MSSP) module is a serial interface useful for communicating with other peripheral or microcontroller devices. These peripheral devices may be serial EEPROMs, shift registers, display drivers, A/D converters, etc. The MSSP module can operate in one of two modes:
+- Serial Peripheral Interface (SPI)
+- Inter-Integrated Circuit (I2C)
 
-## Related Links
+The Inter-Integrated Circuit (I2C) bus is a multi-host serial data communication bus. Devices communicate in a host/client environment where the host devices initiate the communication. A client device is controlled through addressing. The I2C bus specifies two signal connections:
+- Serial Clock (SCL)
+- Serial Data (SDA)
 
-- [PIC16F15244 Product Page](https://www.microchip.com/wwwproducts/en/PIC16F15244 "PIC16F15244 Product Page")
+Both the SCL and SDA connections are bidirectional open-drain lines, each requiring pull-up resistors for the supply voltage. Pulling the line to ground is considered a logical zero and letting the line float is considered a logical one. This code example demonstrates the implementation of Real-Time Clock with alarm feature using MSSP, EUSART and I2C peripherals of the PIC16F15276 microcontroller.
+
+## Related Documentation
+
+- [Configuring the MCP794XX RTCC Family](http://ww1.microchip.com/downloads/en/Appnotes/01491A.pdf "Configuring the MCP794XX RTCC Family")
+- [A Complete Electronic Watch Based on MCP79410 I2C RTCC](http://ww1.microchip.com/downloads/en/Appnotes/00001355B.pdf "A Complete Electronic Watch Based on MCP79410 I2C RTCC")
+- [Using the Alarm Feature on the MCP79410 RTCC to Implement a Delayed Alarm](http://ww1.microchip.com/downloads/en/Appnotes/01364A.pdf "Using the Alarm Feature on the MCP79410 RTCC to Implement a Delayed Alarm")
+- [PIC16F15276 Product Page](https://www.microchip.com/en-us/product/PIC16F15276 "PIC16F15276 Product Page")
+- [PIC16F152xx Family Product Brief](https://ww1.microchip.com/downloads/en/DeviceDoc/40002140A.pdf "PIC16F152xx Family Product Brief")
 - [PIC16F15244 Code Examples on GitHub](https://github.com/microchip-pic-avr-examples "PIC16F15244 Code Examples on GitHub")
-- [PIC16F152xx MCU Family Video](https://youtu.be/nHLv3Th-o-s "PIC16F15244 MCU Family Video")
-- [PIC16F152xx MCU Product Family Page](https://www.microchip.com/en-us/products/microcontrollers-and-microprocessors/8-bit-mcus/pic-mcus/pic16f15244 "PIC16F15244 Product Family Page")
-- [TB3250 - Using PWM to Generate an Analog Output](https://ww1.microchip.com/downloads/en/Appnotes/90003250A.pdf "TB3250 - Using PWM to Generate an Analog Output")
 
 ## Description
 
-In real time applications, ADC is required to convert the analog sensor data to digital value and analyze the data readings. Most of the environmental parameters such as temperature, sound, pressure, light, gas levels, etc. are measurable in analog form only. In the alcohol detection system, analog signal from the alcohol sensor is acquired using ADC and analyzed for alcohol presence.
+In this code example, the user inputs the timestamp data to which they prefer to set the real-time clock, through the UART serial communication interface. In addition to this, the user can also provide the timestamp for the alarm. The RTCC module provides the user the feature to set two alarms. The PIC16F15276 microcontroller, communicates the timestamp received from the user to RTCC module through the I2C interface.
+
+For the ease of demonstration, this code example uses PIC16F15276 Curiosity Nano Development board and RTC 6 Click from MikroElektronika for the Real-Time Clock with alarm feature implementation. There are multiple application that need time measurement which require an RTCC module. RTC 6 Click is based on Microchip's MCP79410, which offers a feature-rich RTCC that incorporates EEPROM, SRAM, unique ID, and timestamp. The RTC 6 Click board is powered-up by an on-board coin cell.
+
+The microcontroller receives the user command and verifies the length of the input and sets the respective values for the real-time clock using the I2C interface..
 
 <p align="center">
   <img width=600 height=auto src="images/blk_diag.png">
-  <br>Figure 1: System Block Diagram <br>
+  <br>Figure 1: Block Diagram <br>
 </p>
 
-* In this example, PIC16F15244 Curiosity Nano board, Alcohol Click and BUZZ 2 Click from MikroElektronika are used for demonstrating sensor data measurement using the ADC peripheral
-* MCU sleep feature is used to demonstrate low-power usage 
-* Press the switch to start the ADC measurement. THE HLT mode of the timer is used for switch debouncing.
-* The data from the sensor is acquired in terms of analog values, which is then compared with the threshold values. If the sensor output detected exceed the threshold value, then alcohol presence is detected
-* The results of the test are displayed on the terminal window, along with buzzer indication using PWM. After completing the cycle, MCU enters Sleep mode again
+# Real-Time Clock
 
-## Alcohol Detection
+RTC 6 Click carries Microchip’s MCP79410 Real-Time Clock/Calendar IC with a built-in 64 bytes of battery backed SRAM and an additional 1 Kbit of EEPROM. 64 bits of protected EEPROM requires an unlock sequence to be unlocked, which makes it suitable for storing a unique ID or other critical information. RTC 6 Click tracks hours, minutes, seconds, days, months, years, and weekdays, with leap year compensation until the year 2399. The clock frequency is derived from an on-board 32.768KHz crystal oscillator. Backup power is supplied by a coin-cell Lithium battery. RTC 6 Click communicates with the target board microcontroller through the mikroBUS I2C interface (SCL, SDA) along with a multifunction pin (MFP, in place of default mikroBUS^TM^  INT pin). The multifunctional pin (MFP) can be configured as an alarm, a square wave frequency output, or a general purpose output. The board is designed to use 3.3V.
 
-Alcohol Click has a high sensitivity to alcohol and it can be used to detect alcohol in concentrations from 0.04 to 4mg/l. Alcohol Click carries an MQ-3 Semiconductor sensor for alcohol. The gas sensing layer on the sensor unit is made of Tin dioxide (SnO2), an inorganic compound which has lower conductivity in clean air. The conductivity increases as the levels of alcohol gas rise. Alcohol Click has a small potentiometer that allows to adjust the load resistance of the sensor circuit.
-
-The Alcohol Click communicates with the microcontroller through the AN pin. The input is provided to the internal ADC of the MCU. The data acquired from the sensor is compared with the threshold levels. If the analog signal from Alcohol Click is above threshold, then alcohol presence is detected.
+The RTC 6 Click from MikroElektronika is used for maintaining the timestamp and the alarm time.
 
 <p align="center">
-  <img width=100 height=150 src="images/alcohol_click.png">
-  <br>Figure 2: Alcohol Click <br>
+  <img width=600 height=auto src="images/rtc_click.png">
+  <br>Figure 2: RTC 6 Click<br>
 </p>
 
-The buzzer is used as an indicator for alcohol detection. PWM is required to turn on the buzzer for indication. The Timer2 is used for addressing two different functionalities: for implementing switch debounce and as a time base for PWM.
-
-<p align="center">
-  <img width=100 height=150 src="images/buzz_2_click.png">
-  <br>Figure 3: Buzz 2 Click <br>
-</p>
+Terminal window shows the timestamp values set or read from RTC 6 Click in decimal and epoch clock format.
 
 ## Software Used
 
 Microchip’s free IDE, compiler and graphical code generators are used throughout the application firmware development. Following are the tools used for this demo application:
 
-* [MPLAB® X IDE v6.10.0](https://www.microchip.com/mplab/mplab-x-ide) or newer
-* [XC8 Compiler v2.41.0](https://www.microchip.com/mplab/compilers) or newer
-* [MPLAB Code Configurator (MCC) v5.3.7](https://www.microchip.com/mplab/mplab-code-configurator)
-* [TMR2 MCC Melody Driver 4.0.16](https://www.npmjs.com/package/@mchp-mcc/scf-pic8-tmr2-v1)
-* [EUSART MCC Melody Driver 7.1.4](https://www.npmjs.com/package/@mchp-mcc/scf-pic8-eusart-v1)
-* [PWM MCC Melody Driver 4.2.10](https://www.npmjs.com/package/@mchp-mcc/scf-pic8-pwm-v2)
-* [ADC MCC Melody Driver 3.0.10](https://www.npmjs.com/package/@mchp-mcc/scf-pic8-adc-v1)
-* [Microchip PIC16F1xxxx Series Device Support 1.19.363](https://packs.download.microchip.com/) or newer
+* [MPLAB^®^ X IDE](https://www.microchip.com/mplab/mplab-x-ide) v6.15.0 or newer
+* [XC8 Compiler](https://www.microchip.com/mplab/compilers) v2.41.0
+* [MPLAB Code Configurator (MCC)](https://www.microchip.com/mplab/mplab-code-configurator)  v5.3.7
+* [Microchip PIC16F1xxxx Series Device Support](https://packs.download.microchip.com/) 1.20.366 or newer
+* EUSART MCC Melody Driver 7.1.4
+* I2C Host MCC Melody driver 1.0.4
 
-***Note: For running the demo, the installed tool versions should be the same or later. This example is not tested with the previous versions.***
+**Note: For running the demo, the installed tool versions should be same or later. This example is not tested with previous versions.**
 
 ## Hardware Used
 
 * [PIC16F15244 Curiosity Nano](https://www.microchip.com/en-us/product/PIC16F15244)
 * [Curiosity Nano Base for Click boards](https://www.microchip.com/developmenttools/ProductDetails/AC164162)
-* [Alcohol Click](https://www.mikroe.com/alcohol-click)
-* [Buzz 2 Click](https://www.mikroe.com/buzz-2-click)
+* [RTC 6 Click Board](https://www.mikroe.com/rtc6-click)
 
-## Hardware Setup
+## Application Firmware
 
-The following figure consists of Alcohol Click, Buzz 2 Click, Curiosity Nano Adapter board and PIC16F15244 Curiosity Nano Evaluation kit. The figure shows the detailed information about the hardware setup. The Alcohol Click and BUZZ 2 click are interfaced with PIC16F15244 MCU using curiosity nano adapter slot 1 and 2 respectively.
+This example is comprised of a single firmware.
+
+The firmware used the EUSART peripheral for communicating with the user to receive timestamps. Upon detection of a valid timestamp, the microcontroller sends the timestamp command to the RTC sensor over I2C interface. It also allows the user to set an alarm time. If the alarm timestamp is provided, then the respective command is provided to the sensor over I2C. On matching the alarm timestamp the on-board LED turns on.
+
+## Hardware setup
+
+The following figure consists of RTC 6 Click, Curiosity Nano base for click boards and PIC16F15276 Curiosity Nano Evaluation Kit. The figure shows the detailed information about the hardware setup. The RTC 6 Click is interfaced with PIC16F15276 microcontroller using curiosity nano adapter slot 2.
 
 <p align="center">
   <img width=600 height=auto src="images/setup.png">
-  <br>Figure 4: Hardware Setup <br>
+  <br>Figure 3: Hardware Setup<br>
 </p>
 
-MQ-3 sensor and the Click board with a pot for adjustable resistance is visible in the image below.
+Real-Time Clock demonstration needs input in epochs format. Also, the output data is in epoch format on the terminal. The required hardware connections are shown in the preceding figure.
+
+In case of device addressing, the control byte is the first byte received following the Start condition from the host device. The control byte begins with a control code '1101' for SRAM/RTCC register read/write. The last bit of the control byte defines the operation to be performed, with 1 for read and 0 for write operation. The combination of the 4-bit control code and the three chip select(CS) bits will define the slave address as shown in the below figure.
 
 <p align="center">
-  <img width=600 height=auto src="images/mq_sensor.png">
-  <br>Figure 5: MQ-3 Sensor & Click Board <br>
+  <img width=600 height=auto src="images/control_reg.png">
+  <br>Figure 4: Control Byte Register<br>
 </p>
 
 ## Operation
 
-* Make the hardware connections as shown in the Hardware Setup section. Power up the Curiosity Nano board using a micro-USB cable.
-* Download the firmware available from the github page link
-* Build the project using the latest versions of tools, as mentioned in the Software Tools section, and load the generated hexadecimal file in to the PIC16F15244 MCU
-* After running the program, the Data Visualizer will display the project name as shown in the figure below
-
-<p align="center">
-  <img width=600 height=auto src="images/default_window.png">
-  <br>Figure 6: Default Display Screen <br>
-</p>
-
-* To wake up the device and perform the alcohol detection test, press the on-board switch. As soon as you press it, the terminal window pops up with the next commands as shown in the below figure.
-
-<p align="center">
-  <img width=600 height=auto src="images/switch_press.png">
-  <br>Figure 7: Post switch press Display Screen <br>
-</p>
-
-* Dip the cotton ball/bud in the liquid containing alcohol and hold it in front of the sensor for five seconds
-* After five seconds, the result of the alcohol test will be displayed on the terminal window as shown in the figure below. The buzzer starts ringing if the alcohol presence is detected.
-
-<p align="center">
-  <img width=600 height=auto src="images/output_window.png">
-  <br>Figure 8: Result Screen <br>
-</p>
-
-* The device goes into Sleep mode after the alcohol detection test is performed. For repeating the alcohol detection test press the  on-board switch.
+- Assemble the hardware as shown in the Hardware Setup. Power up the Curiosity Nano device using a micro-USB cable
+- Download the firmware available from the GitHub page link
+- Build the project using the latest version of tools as mentioned in the Software Tools section and load the generated hexadecimal file in to the PIC16F15276 microcontroller
+- After running the program, the initial display will ask which functionality to perform. Hence, the text/data that is displayed on the terminal is as shown in figure below.
+- If Read the current stamp functionality is selected, the RTC 6 Click will provide the time previously stored in the battery back SRAM
+- The functionality to set the time stamp will allow the user to set the time of his choice
+- The RTC 6 Click is designed to operate using a 32.768kHz crystal oscillator, which starts the clock counters and does provide the accurate time if it is read after setting the time previously
+- For setting the alarm, the input array of characters must include epoch timestamp for the alarm to set
 
 ## Conclusion
 
-The usage of the ADC peripheral along with the Sleep mode feature are showcased through the analog data measurement with the alcohol sensor.
+The Real-Time Clock with alarm feature can be executed with a range of controller families that have less memory and do not support internal RTC feature. The RTC 6 Click supports a two alarm feature with inbuilt Microchip's MCP47910 device, which enables the user to set the timestamp along with two alarms. This code example demonstrates the usage of PIC16F15276 microcontroller together with Microchip’s MCP47910 RTCC module to make a real-time clock with an alarm feature.
 
 ## Appendix
 
-MPLAB® Code Configurator (MCC) is a graphical programming environment that generates seamless, easy to understand C code to give a head start to the project, saving the designer’s time to initialize and configure all the modules, and to go through the data sheets. Using an instructive interface, it enables and configures all peripherals and functions specific to the application requirements.
+MPLAB Code Configurator (MCC) is is a graphical programming environment that generates seamless, easy to understand C code to give a head start to the project, saving the designer’s time to initialize and configure all the modules, and to go through the data sheets. Using an instructive interface, it enables and configures all peripherals and functions specific to the application requirements.
 
-* Start by creating a new Project and open MCC
-* Go to File > New Project
-* Select Microchip Embedded > Standalone Project
-* Enter the device name. In this case we are using the PIC16F15244.
+**Start by creating a new Project and open MCC**
+* Go to **File** > **New Project**
+* Select **Microchip Embedded** > **Standalone Project**
+* Enter the device name. In this case, select PIC16F15276 device
 * Name the project
-* Open the MCC by clicking on MCC logo
+* Launch MCC tool by navigating to Tools > Embedded > MPLAB Code Configurator v4: Open/Close. Alternatively, click the MCC icon to launch the MCC tool.
 
-## System Configuration
+## System configuration
 
-Open Clock Control setup present under System dropdown menu in **Project Resources** tab.
+Open **Clock Control** setup present under System dropdown menu in **Project Resources** tab. Host and the client device will be configured with same configuration as given below.
 
-* Set "Clock Source" as "HFINTOSC"
-* Set "HF Internal Clock" as "4_MHz"
+- Set Clock Source as HFINTOSC
+- Set HF Internal Clock as 16_MHz
+- Enable low power programming checkbox
 
-The system configuration window of MCC is used for the MCU oscillator, the Watchdog Timer and the low voltage programming configuration. The Watchdog Timer is disabled in the application.
+The system configuration window of MCC is used for microcontroller oscillator, Watchdog timer and low voltage programming configuration. The Watchdog timer is disabled in the application.
+
 The following figure shows the system configuration setting in MCC tool.
 
 <p align="center">
-  <img width=600 height=auto src="images/clock_config.png">
-  <br>Figure 9: System Clock Configuration <br>
+  <img width=600 height=auto src="images/system_config.png">
+  <br>Figure 5: Clock Configuration<br>
 </p>
 
-## Timer2 Configuration
+## I2C Configuration
 
-Part 1: The timer is configured for PWM setup, which will dynamically switch to HLT mode for switch debouncing.
+- Serial Protocol: I2C
+- Mode: Host
+- I2C Clock Frequency: 100 kHz
+- Slew Rate Control: Standard Speed
+- SDA Hold Time: 100 ns
 
-* Select Timer – Timer2
-* Control Mode – Roll over pulse
-* Start/Reset Option – Software Control
-* Clock Source – FOSC/4
-* Polarity – Rising Edge, Prescaler – 1:128, Postscaler – 1:1
-* Time Period – 32 ms, Enable Timer Interrupt checkbox
-
-<p align="center">
-  <img width=600 height=auto src="images/timer_config.png">
-  <br>Figure 10: Timer2 Configuration - PWM Setup <br>
-</p>
-
-Part 2: Generate one more project with Timer in HLT mode for debouncing with following configuration.
-
-* Select Timer checkbox
-* Control Mode – Monostable
-* Ext Reset – T2INPPS
-* Star/Reset Option – Start on rising edge on TMR2_ers
-* Clock Source – LFINTOSC
-* Polarity – Rising Edge, Prescaler – 1:128, Postscaler – 1:1
-* Time Period – 50 ms, Enable Timer Interrupt checkbox
+The curiosity Nano base for click boards mikroBUS slot 2 is used for RTC 6 Click, I/O pins for the same are configured through pin manager section of MCC.
 
 <p align="center">
-  <img width=600 height=auto src="images/timer_config_1.png">
-  <br>Figure 11: Timer2 Configuration - HLT Mode Setup <br>
+  <img width=600 height=auto src="images/i2c_config.png">
+  <br>Figure 6: I2C Configuration<br>
 </p>
 
 ## EUSART Configuration
-EUSART is used for displaying the alcohol detection test results and debugging.
 
-* Set EUSART Mode to Asynchronous
-* Enable EUSART, Transmit checkbox
-* Set Baud Rate – 9600
-* Set Transmission and Reception bits – 8bit
-* Select checkbox for Redirect STDIO to USART
+The EUSART peripheral is used by both host and client devices for the communication amongst them. 
+
+- Set EUSART Mode to Asynchronous
+- Enable EUSART, Transmit & Receive checkbox
+- Set Baud Rate to 9600
+- Set Transmission and Reception bits to 8bit
+- Select checkbox for Redirect STDIO to USART
 
 <p align="center">
   <img width=600 height=auto src="images/eusart_config.png">
-  <br>Figure 12: EUSART Configuration <br>
+  <br>Figure 7: EUSART Configuration<br>
 </p>
 
-## PWM Configuration
+## Data Visualizer Configuration
+ 
+Pre-configured data streamer file is available with the firmware package. The below steps given for data visualizer configuration use these files to prepare the setup.
 
-* Select a Timer - Timer2
-* Select Duty Cycle – 50%
-* PWM Polarity – active_hi
+* Configure the serial port for communication with the Curiosity Nano Adapter Board
+* Set the baud rate to 115200, parity to none and stop bits to 1
+* Ensure the DTR option and Open Terminal options both are checked and RTS is unchecked
+* Configure Terminal for visualizing the data values in real-time
 
-<p align="center">
-  <img width=600 height=auto src="images/pwm_config.png">
-  <br>Figure 13: PWM Configuration <br>
-</p>
-
-## ADC Configuration
-
-* Enable ADC 
-* Result alignment - right
-* Positive reference - V~DD~
-* Clock source - Fosc/4
-
-<p align="center">
-  <img width=600 height=auto src="images/adc_config.png">
-  <br>Figure 14: ADC Configuration <br>
-</p>
-
-## Pin Mapping
-
-<p align="center">
-  <img width=600 height=auto src="images/pin_config.png">
-  <br>Figure 15: Pin Configuration <br>
-</p>
-
-* The pin mapping highlights the Timer2 and switch with the same pin mapped, as HLT mode is used
-* The ADC channel selection is highlighted as it takes input from RA5 pin (CHS value : 000101)
-* PWM provides output to the buzzer, which uses Timer2
+**NOTE**: Refer [Data Visualizer](http://www.microchip.com/DS40001903) user guide for more information.
