@@ -10,7 +10,7 @@
         "shortDescription": "This example demonstrates sensor data measurement i.e. acquiring and processing sensor raw data using built in ADC and timer peripherals of the PIC microcontroller. Compatible PIC16F152xx family of MCUs are: PIC16F15214, PIC16F15254, PIC16F15276",
         "ide": {
             "name": "MPLAB X",
-            "semverRange": ">=6.10.0"
+            "semverRange": ">=6.15.0"
         },
         "compiler": [
             {
